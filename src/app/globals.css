@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+:root {
+  --background: #09090f;
+  --surface: #151520;
+  --elevated: #1e1e2d;
+  --primary: #8b5cf6;
+  --secondary: #a78bfa;
+  --foreground: #fafafa;
+  --muted: #9494a8;
+  --border: rgb(255 255 255 / 0.08);
+  --danger: #f87171;
+  --success: #34d399;
+  --warning: #fbbf24;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-elevated: var(--elevated);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgb(139 92 246 / 0.4);
+}
+
+.bg-grid {
+  background-image:
+    radial-gradient(ellipse 60% 40% at 50% -10%, rgb(139 92 246 / 0.25), transparent),
+    linear-gradient(rgb(255 255 255 / 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px);
+  background-size: auto, 48px 48px, 48px 48px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
