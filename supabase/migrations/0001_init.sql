@@ -1,7 +1,7 @@
 -- Unfollow AI — initial schema. Safe to re-run (idempotent where possible).
 -- Users live in Supabase Auth (auth.users); every table is scoped by user_id with RLS.
 
-create extension if not exists pgcrypto;
+-- gen_random_uuid() is built into Postgres 13+, no extension needed.
 
 -- ───────────────────────── imports & accounts ─────────────────────────
 create table if not exists public.instagram_imports (

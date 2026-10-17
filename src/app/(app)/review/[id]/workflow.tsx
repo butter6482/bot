@@ -8,6 +8,7 @@ import { Badge, Card, Skeleton } from "@/components/ui/card";
 import { api } from "@/lib/client";
 import { CATEGORY_LABELS, type Category } from "@/lib/classification";
 import { describeFilters, filtersSchema } from "@/lib/filters";
+import { activeProvider } from "@/lib/execution";
 import { profileUrl } from "@/lib/instagram/username";
 import { cn } from "@/lib/utils";
 
@@ -119,7 +120,10 @@ export function ReviewWorkflow({ batchId }: { batchId: string }) {
             <ExternalLink /> Open Instagram Profile
           </a>
           <p className="text-xs text-muted">
-            Unfollow on Instagram yourself, then come back. {opened.has(item.id) ? "Opened — " : ""}Marking an account never changes anything on Instagram.
+            {activeProvider.capabilities.automaticUnfollow
+              ? "Actions run through the connected integration."
+              : "No authorized automatic-unfollow integration exists, so unfollow on Instagram yourself, then come back."}{" "}
+            {opened.has(item.id) ? "Opened — " : ""}Marking an account never changes anything on Instagram.
           </p>
 
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">

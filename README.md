@@ -34,19 +34,22 @@ npm run dev
 
 ### Supabase
 1. Create a project; copy the URL, anon key and service-role key into `.env.local`.
-2. Run `supabase/migrations/0001_init.sql` in the SQL editor (or `supabase db push`). It creates all tables, indexes and RLS policies (every row is scoped to `auth.uid()`).
+2. Run `supabase/migrations/0001_init.sql` in the SQL editor (or `supabase db push`). If the `create extension` line hangs, delete it — `gen_random_uuid()` is built into Postgres 13+. It creates all tables, indexes and RLS policies (every row is scoped to `auth.uid()`).
 3. Auth → Providers: enable Email. Optionally enable Google and set `NEXT_PUBLIC_GOOGLE_AUTH=true`.
 4. Auth → URL configuration: add `http://localhost:3000/auth/callback` and your production `https://<domain>/auth/callback`.
 
 Tables: `instagram_imports`, `instagram_accounts` (per-import snapshot: `is_follower` / `is_following`), `account_classifications`, `protected_accounts`, `saved_filters`, `review_batches`, `review_items`, `ai_requests` (token/latency log, no prompt text). Users live in Supabase Auth; deleting a user cascades everything.
 
 ### OpenRouter
-Set `OPENROUTER_API_KEY` and `OPENROUTER_MODEL` (any model id from openrouter.ai/models that supports JSON output). Calls happen only in server route handlers, with a 25 s timeout, 3 attempts with backoff, Zod validation, DB-backed rate limits (6/min, 200/day per user) and token logging. If AI is unavailable the command box falls back to a clearly-labelled keyword interpreter.
+Set `OPENROUTER_API_KEY` and `OPENROUTER_MODEL` (any model id from openrouter.ai/models that supports JSON output, e.g. `openai/gpt-4o-mini`). Calls happen only in server route handlers, with a 25 s timeout, 3 attempts with backoff, Zod validation, DB-backed rate limits (6/min, 200/day per user) and token logging. If AI is unavailable the command box falls back to a clearly-labelled keyword interpreter.
 
 ### Vercel
 1. Import the repo in Vercel (framework: Next.js, no extra config).
 2. Add every variable from `.env.example` (mark the service-role and OpenRouter keys as server-only — they have no `NEXT_PUBLIC_` prefix).
 3. Deploy. No filesystem, long-running worker or browser automation is required.
+
+## Feasibility of automatic unfollowing
+See [docs/INSTAGRAM_FEASIBILITY.md](docs/INSTAGRAM_FEASIBILITY.md). Summary: no authorized unfollow endpoint was found, official OAuth is for professional accounts and does not expose relationship lists, so the app ships the manual review workflow and keeps selection separate from execution (`src/lib/execution`).
 
 ## Scripts
 `npm run dev` · `npm run build` · `npm test` · `npm run typecheck` · `npm run lint`
